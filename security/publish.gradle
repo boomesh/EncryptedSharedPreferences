@@ -1,0 +1,157 @@
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+// this kind soul made a really clean publish script here
+// https://github.com/patrickfav/armadillo/blob/master/gradle/jacoco-utils.gradle
+
+def final publishConfig = [
+        name                    : 'EncryptedSharedPreferences',
+        repoName                : 'security', //repo name in bintray 'maven/<reponame>'
+        group                   : 'com.boomesh.security',
+        version                 : rootProject.ext.versionNameLib,
+        descriptionText         : 'A shared preference implementation using the keystore and shared preferences.',
+        inceptionYear           : '2019',
+        siteUrl                 : 'https://github.com/boomesh/EncryptedSharedPreferences',
+        gitUrl                  : 'https://github.com/boomesh/EncryptedSharedPreferences.git',
+        issueTrackerUrl         : 'https://github.com/boomesh/EncryptedSharedPreferences/issues',
+        issueTrackerName        : 'Github',
+        githubRepo              : 'boomesh/EncryptedSharedPreferences',
+
+        pomDevId                : 'boomesh',
+        pomDevName              : 'Sumesh',
+        pomDevMail              : '8161320+boomesh@users.noreply.github.com',
+
+        licenseName             : 'The MIT License',
+        licenseBintray          : ['MIT'],
+        licenseUrl              : 'https://opensource.org/licenses/mit-license.php',
+
+        bintrayLabels           : ['android', 'sharedpreferences', 'keystore'],
+
+        bintrayUploadDryRun     : false, //Whether to only mock uploading
+        bintrayUploadAutoPublish: true, //Whether version should be auto published after an upload
+        bintrayUploadOverride   : true, //[Default: false] Whether to override version artifacts already published
+        bintrayPubDlNumbers     : false, //Whether to show public dl stats in bintray
+        bintraySyncMavenCentral : false
+]
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            version publishConfig.version
+            project {
+                name publishConfig.name
+                groupId publishConfig.group
+                artifactId publishConfig.name
+                packaging 'aar'
+                description publishConfig.descriptionText
+                url publishConfig.siteUrl
+                inceptionYear publishConfig.inceptionYear
+
+                licenses {
+                    license {
+                        name publishConfig.licenseName
+                        url publishConfig.licenseUrl
+                    }
+                }
+                developers {
+                    developer {
+                        id publishConfig.pomDevId
+                        name publishConfig.pomDevName
+                        email publishConfig.pomDevMail
+                    }
+                }
+                scm {
+                    connection publishConfig.gitUrl
+                    developerConnection publishConfig.gitUrl
+                    url publishConfig.siteUrl
+                }
+
+                issueManagement {
+                    system publishConfig.issueTrackerName
+                    url publishConfig.issueTrackerUrl
+                }
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    // https://github.com/novoda/bintray-release/issues/71#issuecomment-224324120
+    excludes = ['**/*.kt'] // < ---- Exclude all kotlin files from javadoc file.
+    failOnError false
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+Properties properties = new Properties()
+if (project.rootProject.file('local.properties') != null && project.rootProject.file('local.properties').exists()) {
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+}
+
+// https://github.com/bintray/gradle-bintray-plugin
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+
+    dryRun = publishConfig.bintrayUploadDryRun
+    publish = publishConfig.bintrayUploadAutoPublish
+    //Whether version should be auto published after an upload
+    override = publishConfig.bintrayUploadOverride
+    //[Default: false] Whether to override version artifacts already published
+
+    pkg {
+        repo = publishConfig.repoName
+        name = publishConfig.name
+        group publishConfig.group
+
+        desc = publishConfig.descriptionText
+        issueTrackerUrl = publishConfig.issueTrackerUrl
+        websiteUrl = publishConfig.siteUrl
+        vcsUrl = publishConfig.gitUrl
+
+        licenses = publishConfig.licenseBintray
+
+        githubRepo = publishConfig.githubRepo
+        githubReleaseNotesFile = 'CHANGELOG'
+        labels = publishConfig.bintrayLabels
+        publicDownloadNumbers = publishConfig.bintrayPubDlNumbers
+
+        version {
+            name = publishConfig.version
+            vcsTag = publishConfig.version
+            released = new Date()
+
+            gpg {
+                sign = true //Determines whether to GPG sign the files. The default is false
+                passphrase = properties.getProperty("bintray.gpg.password")
+            }
+
+            mavenCentralSync {
+                sync = publishConfig.bintraySyncMavenCentral
+                //Optional (true by default). Determines whether to sync the version to Maven Central.
+                user = properties.getProperty("bintray.oss.user") //OSS user token
+                password = properties.getProperty("bintray.oss.password") //OSS user password
+                close = '1'
+                //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+            }
+        }
+    }
+}
