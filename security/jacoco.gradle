@@ -1,0 +1,90 @@
+// https://docs.gradle.org/current/userguide/jacoco_plugin.html
+// https://blog.gouline.net/code-coverage-on-android-with-jacoco-92ec90c9355e
+// http://vgaidarji.me/blog/2017/12/20/how-to-configure-jacoco-for-kotlin-and-java-project/
+
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = "0.8.3"
+    reportsDir = file("$buildDir/reports")
+}
+
+project.afterEvaluate {
+    // what to exclude from coverage report
+    // UI, "noise", generated classes, platform classes, etc.
+    def androidExcludes = [
+            '**/R.class',
+            '**/R$*.class',
+            '**/*$ViewInjector*.*',
+            '**/BuildConfig.*',
+            '**/Manifest*.*',
+            '**/*Test*.*',
+            'android/**/*.*',
+            '**/*Fragment.*',
+            '**/*Activity.*'
+    ]
+
+    def projectExcludes = [
+            'com/boomesh/security/di/**',
+            'com/boomesh/security/preferences/EncryptedSharedPreferences.*'
+    ]
+
+    // Grab all build types and product flavors
+    def buildTypes = android.buildTypes.collect { type -> type.name }
+    def productFlavors = android.productFlavors.collect { flavor -> flavor.name }
+
+    // When no product flavors defined, use empty
+    if (!productFlavors) productFlavors.add('')
+
+    productFlavors.each { productFlavorName ->
+        buildTypes.each { buildTypeName ->
+            def sourceName, sourcePath
+
+            if (!productFlavorName) {
+                sourceName = sourcePath = "${buildTypeName}"
+            } else {
+                sourceName = "${productFlavorName}${buildTypeName.capitalize()}"
+                sourcePath = "${productFlavorName}/${buildTypeName}"
+            }
+
+            def testTaskName = "test${sourceName.capitalize()}UnitTest"
+
+            // Create coverage task of form 'testFlavorTypeCoverage' depending on 'testFlavorTypeUnitTest'
+            task "${testTaskName}Coverage"(type: JacocoReport, dependsOn: "$testTaskName") {
+                group = "Reporting"
+                description = "Generate Jacoco coverage reports on the ${sourceName.capitalize()} build."
+
+                reports {
+                    xml.enabled false
+                    csv.enabled false
+                    html.enabled = true
+                }
+
+                // generated classes
+                classDirectories = fileTree(
+                        dir: "${project.buildDir}/intermediates/classes/${sourcePath}",
+                        excludes: androidExcludes + projectExcludes
+                ) + fileTree(
+                        dir: "${project.buildDir}/tmp/kotlin-classes/${sourcePath}",
+                        excludes: androidExcludes + projectExcludes
+                )
+
+                //sources
+                def coverageSourceDirs = [
+                        "src/main/java",
+                        "src/main/kotlin",
+
+                        "src/$productFlavorName/java",
+                        "src/$productFlavorName/kotlin",
+
+                        "src/$buildTypeName/java",
+                        "src/$buildTypeName/kotlin"
+                ]
+                additionalSourceDirs = files(coverageSourceDirs)
+                sourceDirectories = files(coverageSourceDirs)
+
+                executionData = files("${project.buildDir}/jacoco/${testTaskName}.exec")
+            }
+        }
+    }
+}

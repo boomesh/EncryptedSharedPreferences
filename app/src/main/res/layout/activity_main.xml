@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <ScrollView
+        android:id="@+id/content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/encrypt_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp">
+
+            <EditText
+                android:id="@+id/encrypt_str_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/encrypt_txt_hint"
+                android:inputType="text"
+                app:layout_constraintBottom_toTopOf="@id/decrypt_str_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="Autofill" />
+
+            <TextView
+                android:id="@+id/decrypt_str_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                app:layout_constraintBottom_toTopOf="@id/encrypt_int_et"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/encrypt_str_et" />
+
+            <EditText
+                android:id="@+id/encrypt_int_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/encrypt_int_hint"
+                android:inputType="numberSigned"
+                app:layout_constraintBottom_toTopOf="@id/decrypt_int_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/decrypt_str_tv"
+                tools:ignore="Autofill" />
+
+            <TextView
+                android:id="@+id/decrypt_int_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                app:layout_constraintBottom_toTopOf="@id/encrypt_long_et"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/encrypt_int_et" />
+
+            <EditText
+                android:id="@+id/encrypt_long_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/encrypt_long_hint"
+                android:inputType="numberSigned"
+                app:layout_constraintBottom_toTopOf="@id/decrypt_long_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/decrypt_int_tv"
+                tools:ignore="Autofill" />
+
+            <TextView
+                android:id="@+id/decrypt_long_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                app:layout_constraintBottom_toTopOf="@id/encrypt_float_et"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/encrypt_long_et" />
+
+            <EditText
+                android:id="@+id/encrypt_float_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/encrypt_float_hint"
+                android:inputType="numberDecimal"
+                app:layout_constraintBottom_toTopOf="@id/decrypt_float_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/decrypt_long_tv"
+                tools:ignore="Autofill" />
+
+            <TextView
+                android:id="@+id/decrypt_float_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                app:layout_constraintBottom_toTopOf="@id/encrypt_strset_et"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/encrypt_float_et" />
+
+            <EditText
+                android:id="@+id/encrypt_strset_et"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/encrypt_strset_hint"
+                android:inputType="text"
+                app:layout_constraintBottom_toTopOf="@id/decrypt_strset_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/decrypt_float_tv"
+                tools:ignore="Autofill" />
+
+            <TextView
+                android:id="@+id/decrypt_strset_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/encrypt_strset_et" />
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/encrypt_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/encrypt_cta"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/content" />
+</android.support.constraint.ConstraintLayout>

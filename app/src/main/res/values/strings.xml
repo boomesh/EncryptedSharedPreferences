@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ESPSample</string>
+    <string name="encrypt_cta">Encrypt</string>
+    <string name="encrypt_txt_hint">Text to encrypt</string>
+    <string name="encrypt_int_hint">Integers to Encrypt</string>
+    <string name="encrypt_long_hint">Long Numbers to Encrypt</string>
+    <string name="encrypt_float_hint">Floating Point Numbers to Encrypt</string>
+    <string name="encrypt_strset_hint">Comma Separated List to Encrypt</string>
+</resources>
