@@ -44,8 +44,6 @@ jobs:
         - ./gradlew :security:testDebugUnitTest --info
         - ./gradlew lint --stacktrace
         - ./gradlew :security:testDebugUnitTestCoverage
-      after_success:
-        - ./gradlew :security:testReleaseUnitTestCoverage :security:copyJacocoReport coveralls --info
     - stage: buildDefault
       if: (type IN (push))
       before_install:
