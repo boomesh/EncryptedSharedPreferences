@@ -3,6 +3,7 @@
 [![Download](https://api.bintray.com/packages/boomesh/security/EncryptedSharedPreferences/images/download.svg?version=1.0.0) ](https://bintray.com/boomesh/security/EncryptedSharedPreferences/1.0.0/link)
 [![Build Status](https://travis-ci.com/boomesh/EncryptedSharedPreferences.svg?branch=master)](https://travis-ci.com/boomesh/EncryptedSharedPreferences)
 [![Coverage Status](https://coveralls.io/repos/github/boomesh/EncryptedSharedPreferences/badge.svg?branch=master)](https://coveralls.io/github/boomesh/EncryptedSharedPreferences?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/25bd5f7103896ae59066/maintainability)](https://codeclimate.com/github/boomesh/EncryptedSharedPreferences/maintainability)
 
 ## Purpose
 - this library gives you an out of the box solution for encrypting values in a Shared Preferences file via the Android Keystore
