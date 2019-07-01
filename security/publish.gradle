@@ -42,6 +42,7 @@ install {
             project {
                 name publishConfig.name
                 groupId publishConfig.group
+                artifactId publishConfig.name
                 packaging 'aar'
                 description publishConfig.descriptionText
                 url publishConfig.siteUrl
